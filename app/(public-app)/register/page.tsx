@@ -22,10 +22,10 @@ export default function RegisterPage() {
         action={onFormSubmit}
         className="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[350px] relative"
       >
-        <div className="space-y-2 text-center">
+        <div className="space-y-2">
           <h1 className="text-3xl font-bold">Sign Up</h1>
           <p className="text-muted-foreground">
-            Create your account to find the best Stamtisch 🍻
+            Create your account to find the best Stamtisch in town 🍻
           </p>
         </div>
         <div className="grid grid-cols-2 gap-4">
