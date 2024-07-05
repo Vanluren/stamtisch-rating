@@ -12,6 +12,16 @@ const checkProtectedRoutes = (req: NextRequest) => {
 
     return response;
   }
+  if (
+    [ROUTES.LOGIN, ROUTES.REGISTER].includes(req.nextUrl.pathname) &&
+    currentUser
+  ) {
+    const response = NextResponse.redirect(
+      new URL(ROUTES.HOME, req.nextUrl.origin).href,
+    );
+
+    return response;
+  }
 };
 export function middleware(req: NextRequest) {
   const response = checkProtectedRoutes(req);

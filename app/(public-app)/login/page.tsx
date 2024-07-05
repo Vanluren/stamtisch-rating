@@ -3,13 +3,28 @@
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
+import { API_ROUTES, ROUTES } from "@/lib/routes";
+import { redirect } from "next/navigation";
 
 export default function LoginPage() {
   const [loading, setLoading] = useState(false);
-  const onFormSubmit = async () => {
+  const onFormSubmit = async (formData: FormData) => {
     try {
       setLoading(true);
-      console.log("submitting form");
+      const res = await fetch(API_ROUTES.login, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email: formData.get("email"),
+          password: formData.get("password"),
+        }),
+      }).then((res) => res.json());
+
+      if (res.ok) {
+        return redirect(ROUTES.HOME);
+      }
     } catch (error) {
     } finally {
       setLoading(false);
