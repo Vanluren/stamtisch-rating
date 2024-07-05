@@ -3,11 +3,12 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { API_ROUTES, ROUTES } from "@/lib/routes";
-import { redirect } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 export default function RegisterPage() {
   const [loading, setLoading] = useState(false);
+  const { push } = useRouter();
 
   const onFormSubmit = async (formData: FormData) => {
     try {
@@ -24,10 +25,10 @@ export default function RegisterPage() {
           firstName: formData.get("first-name"),
           lastName: formData.get("last-name"),
         }),
-      }).then((res) => res.json());
+      });
 
-      if (res.user) {
-        return redirect(ROUTES.HOME);
+      if (res.ok) {
+        return push(ROUTES.LOGIN);
       }
     } catch (error) {
       console.error(error);

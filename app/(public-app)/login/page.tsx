@@ -4,10 +4,11 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import { API_ROUTES, ROUTES } from "@/lib/routes";
-import { redirect } from "next/navigation";
+import { useRouter } from "next/navigation";
 
 export default function LoginPage() {
   const [loading, setLoading] = useState(false);
+  const { replace } = useRouter();
   const onFormSubmit = async (formData: FormData) => {
     try {
       setLoading(true);
@@ -20,10 +21,10 @@ export default function LoginPage() {
           email: formData.get("email"),
           password: formData.get("password"),
         }),
-      }).then((res) => res.json());
+      });
 
       if (res.ok) {
-        return redirect(ROUTES.HOME);
+        return replace(ROUTES.HOME);
       }
     } catch (error) {
     } finally {

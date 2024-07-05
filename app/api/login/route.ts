@@ -3,10 +3,6 @@ import { compare } from "bcrypt";
 import { cookies } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
 
-const comparePassword = async (password: string, hashedPassword: string) => {
-  return await compare(password, hashedPassword);
-};
-
 export async function POST(request: NextRequest, _: NextResponse) {
   try {
     const body = await request.json();
