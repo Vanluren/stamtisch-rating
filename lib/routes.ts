@@ -5,6 +5,7 @@ export const ROUTES = {
   REGISTER: "/register",
   REVIEW_DETAILS: (id: string) => "/review/" + id,
   REVIEWS: "/reviews",
+  PROFILE: "/profile",
 };
 
 export const API_ROUTES = {
