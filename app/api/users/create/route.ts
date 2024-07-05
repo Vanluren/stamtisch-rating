@@ -1,24 +1,42 @@
 import prisma from "@/lib/prisma";
 import { genSalt, hash } from "bcrypt";
-import { Profile, User } from "@prisma/client";
+import { NextRequest, NextResponse } from "next/server";
 
 const hashPassword = async (password: string) => {
   const salt = await genSalt(10);
-
   return hash(password, salt);
 };
 
-export async function POST(
-  _: Response,
-  request: { body: User & Partial<Profile> },
-) {
-  try {
-    const { email, password } = request.body;
+export async function GET() {
+  return Response.json({
+    status: 405,
+    message: "Method not allowed",
+  });
+}
 
-    if (!email || !password) {
+export async function PUT() {
+  return Response.json({
+    status: 405,
+    message: "Method not allowed",
+  });
+}
+
+export async function PATCH() {
+  return Response.json({
+    status: 405,
+    message: "Method not allowed",
+  });
+}
+
+export async function POST(request: NextRequest, _: NextResponse) {
+  try {
+    const body = await request.json();
+    const { email, password, firstName, lastName } = body;
+
+    if (!email || !password || !firstName || !lastName) {
       return Response.json({
         status: 400,
-        error: "Email and password are required",
+        error: "Missing required fields",
       });
     }
 
@@ -50,9 +68,8 @@ export async function POST(
               id: user.id,
             },
           },
-          firstName: request.body.firstName,
-          lastName: request.body.lastName,
-          bio: "",
+          firstName,
+          lastName,
         },
       });
 
@@ -68,7 +85,7 @@ export async function POST(
       user,
     });
   } catch (error) {
-    console.error("Error creating user", error);
+    console.error(error);
     return Response.json({
       status: 500,
       error: "Error creating user",
