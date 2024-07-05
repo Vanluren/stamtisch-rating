@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { API_ROUTES, ROUTES } from "@/lib/routes";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
@@ -38,10 +39,10 @@ export default function RegisterPage() {
   };
 
   return (
-    <div className="lg:p-8 flex flex-col">
+    <div className="lg:p-8 flex flex-col mx-auto">
       <form
         action={onFormSubmit}
-        className="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[350px] relative"
+        className=" flex w-full flex-col justify-center space-y-6 sm:w-[350px] relative"
       >
         <div className="space-y-2">
           <h1 className="text-3xl font-bold">Sign Up</h1>
@@ -70,12 +71,23 @@ export default function RegisterPage() {
         </div>
         <div className="space-y-2">
           <Label htmlFor="password">Password</Label>
-          <Input name="password" type="password" required />
+          <Input
+            name="password"
+            type="password"
+            placeholder="P4ssw0rd123!"
+            required
+          />
         </div>
         <Button aria-disabled={loading} type="submit">
           Sign Me Up!
         </Button>
       </form>
+      <div className="mt-4 flex flex-row justify-end gap-2">
+        <span className="text-gray-400 ">Already have an account?</span>
+        <Link href={ROUTES.LOGIN} className="text-primary underline">
+          Login here
+        </Link>
+      </div>
     </div>
   );
 }
