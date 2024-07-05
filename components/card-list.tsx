@@ -15,7 +15,7 @@ export function CardList({ title }: CardListProps) {
             <div className="flex items-center justify-between mb-6">
               <h2 className="text-2xl font-bold tracking-tight">{title}</h2>
               <Link
-                href={`${ROUTES.REVIEWS}?sort=rating`}
+                href={`${ROUTES.REVIEWS}`}
                 className="text-sm font-medium hover:underline text-secondary-foreground"
                 prefetch={false}
               >

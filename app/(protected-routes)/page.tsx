@@ -5,7 +5,7 @@ export default function Page() {
   return (
     <div>
       <SearchHero />
-      <CardList title="Top rated bars" description="These are top rated bars" />
+      <CardList title="Top rated bars" />
     </div>
   );
 }
