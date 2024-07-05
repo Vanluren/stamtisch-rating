@@ -1,7 +1,11 @@
 import prisma from "@/lib/prisma";
 import { User } from "@prisma/client";
+import { NextRequest } from "next/server";
 
-export async function GET(_: Response, { params }: { params: { id: string } }) {
+export async function GET(
+  _: NextRequest,
+  { params }: { params: { id: string } },
+) {
   const id = params.id;
   const user = await prisma.user.findUnique({
     where: {
@@ -23,7 +27,7 @@ export async function GET(_: Response, { params }: { params: { id: string } }) {
 }
 
 export async function PUT(
-  _: Response,
+  _: NextRequest,
   { params, body }: { params: { id: string }; body: Partial<User> },
 ) {
   const id = params.id;
@@ -33,6 +37,30 @@ export async function PUT(
     },
     data: {
       ...body,
+    },
+  });
+
+  if (!user) {
+    return Response.json({
+      status: 404,
+      message: "User not found",
+    });
+  }
+
+  return Response.json({
+    status: 200,
+    user,
+  });
+}
+
+export async function DELETE(
+  _: NextRequest,
+  { params }: { params: { id: string } },
+) {
+  const id = params.id;
+  const user = await prisma.user.delete({
+    where: {
+      id,
     },
   });
 
