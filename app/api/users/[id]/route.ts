@@ -48,3 +48,27 @@ export async function PUT(
     user,
   });
 }
+
+export async function DELETE(
+  _: Response,
+  { params }: { params: { id: string } },
+) {
+  const id = params.id;
+  const user = await prisma.user.delete({
+    where: {
+      id,
+    },
+  });
+
+  if (!user) {
+    return Response.json({
+      status: 404,
+      message: "User not found",
+    });
+  }
+
+  return Response.json({
+    status: 200,
+    user,
+  });
+}
