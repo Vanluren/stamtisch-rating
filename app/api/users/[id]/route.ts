@@ -11,6 +11,9 @@ export async function GET(
     where: {
       id,
     },
+    include: {
+      profile: true,
+    },
   });
 
   if (!user) {
