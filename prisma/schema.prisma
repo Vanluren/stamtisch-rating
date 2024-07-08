@@ -9,16 +9,18 @@ datasource db {
 }
 
 model User {
-  id        String      @id @default(uuid())
-  email     String      @unique
-  password  String
-  profile   Profile?
-  reviews   Review[]
-  ratings   Rating[]
-  comments  Comment[]
-  images    ImageFile[]
-  createdAt DateTime    @default(now())
-  updatedAt DateTime    @updatedAt
+  id               String          @id @default(uuid())
+  email            String          @unique
+  password         String
+  profile          Profile?
+  reviews          Review[]
+  ratings          Rating[]
+  comments         Comment[]
+  images           ImageFile[]
+  createdAt        DateTime        @default(now())
+  updatedAt        DateTime        @updatedAt
+  ReviewActivity   ReviewActivity? @relation(fields: [reviewActivityId], references: [id])
+  reviewActivityId String?
 }
 
 model Profile {
@@ -39,31 +41,50 @@ enum ReviewStatus {
 }
 
 model Review {
-  id          String         @id @default(uuid())
+  id          String           @id @default(uuid())
   title       String
   description String?
-  owner       User           @relation(fields: [ownerId], references: [id])
+  owner       User             @relation(fields: [ownerId], references: [id])
   ownerId     String
-  location    ReviewLocation @relation(fields: [locationId], references: [id])
+  location    ReviewLocation   @relation(fields: [locationId], references: [id])
+  acitivities ReviewActivity[]
   locationId  String
   ratings     Rating[]
   comments    Comment[]
   status      ReviewStatus
   imagePaths  String[]
-  createdAt   DateTime       @default(now())
-  updatedAt   DateTime       @updatedAt
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @updatedAt
 }
 
 model ReviewLocation {
-  id        String   @id @default(uuid())
-  name      String
-  address   String
-  latitude  Float
-  longitude Float
-  placeId   String?
-  reviews   Review[]
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id         String           @id @default(uuid())
+  name       String
+  address    String
+  latitude   Float
+  longitude  Float
+  placeId    String?
+  reviews    Review[]
+  activities ReviewActivity[]
+  createdAt  DateTime         @default(now())
+  updatedAt  DateTime         @updatedAt
+}
+
+enum ActivityStatus {
+  ACTIVE
+  INACTIVE
+}
+
+model ReviewActivity {
+  id           String         @id @default(uuid())
+  location     ReviewLocation @relation(fields: [locationId], references: [id])
+  locationId   String
+  review       Review         @relation(fields: [reviewId], references: [id])
+  reviewId     String
+  participants User[]
+  status       ActivityStatus @default(ACTIVE)
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
 }
 
 model Rating {
