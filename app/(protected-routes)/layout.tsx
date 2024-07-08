@@ -14,7 +14,7 @@ export default function ProtectedRoutesLayout({
         <Link href={ROUTES.HOME}>
           <BeerIcon className="w-8 h-8 m-2" />
         </Link>
-        <UserAvatar />
+        <UserAvatar size="small" />
       </nav>
       {children}
     </div>
