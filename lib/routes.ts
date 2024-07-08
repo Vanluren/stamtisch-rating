@@ -7,6 +7,10 @@ export const ROUTES = {
   REVIEWS: "/reviews",
   PROFILE: "/profile",
   LOCATION: (id: string) => "/location/" + id,
+  RATING_ACTIVITY: {
+    NEW: "/rating-activity/new",
+    DETAILS: (id: string) => "/rating-activity/" + id,
+  },
 };
 
 export const API_ROUTES = {
