@@ -6,6 +6,7 @@ export const ROUTES = {
   REVIEW_DETAILS: (id: string) => "/review/" + id,
   REVIEWS: "/reviews",
   PROFILE: "/profile",
+  LOCATION: (id: string) => "/location/" + id,
 };
 
 export const API_ROUTES = {

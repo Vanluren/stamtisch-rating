@@ -37,26 +37,24 @@ export default function ReviewCard({
   images,
 }: ReviewCardProps) {
   return (
-    <Card>
-      <CardContent className="p-4">
-        <div className="flex items-center justify-between mb-2">
-          <h3 className="text-lg font-semibold capitalize">{title}</h3>
+    <Link href={ROUTES.LOCATION(id)}>
+      <Card className="cursor-pointer">
+        <CardContent className="p-4">
+          <div className="flex items-center justify-between mb-2">
+            <h3 className="text-lg font-semibold capitalize">{title}</h3>
 
-          <div className="flex items-center gap-1 text-primary">
-            <StarIcon className="w-4 h-4" />
-            <span className="font-medium">4.7</span>
+            <div className="flex items-center gap-1 text-primary">
+              <StarIcon className="w-4 h-4" />
+              <span className="font-medium">4.7</span>
+            </div>
           </div>
-        </div>
-        <ImageBlocks images={images} />
-        <p className="text-sm text-muted-foreground mt-2">{description}</p>
-        <Link
-          href={ROUTES.REVIEW_DETAILS(id)}
-          className="text-sm font-medium hover:underline mt-2"
-          prefetch={false}
-        >
-          View Details
-        </Link>
-      </CardContent>
-    </Card>
+          <ImageBlocks images={images} />
+          <p className="text-sm text-muted-foreground mt-2">{description}</p>
+          <span className="text-sm font-medium hover:underline mt-2">
+            View Details
+          </span>
+        </CardContent>
+      </Card>
+    </Link>
   );
 }
