@@ -7,6 +7,7 @@ import { API_ROUTES, ROUTES } from "@/lib/routes";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { Label } from "@/components/ui/label";
+import { fetcher } from "@/lib/fetch";
 
 export default function LoginPage() {
   const [loading, setLoading] = useState(false);
@@ -14,11 +15,8 @@ export default function LoginPage() {
   const onFormSubmit = async (formData: FormData) => {
     try {
       setLoading(true);
-      const res = await fetch(API_ROUTES.login, {
+      const res = await fetcher(API_ROUTES.login, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
         body: JSON.stringify({
           email: formData.get("email"),
           password: formData.get("password"),

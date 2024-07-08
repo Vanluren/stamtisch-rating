@@ -2,6 +2,7 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { fetcher } from "@/lib/fetch";
 import { API_ROUTES, ROUTES } from "@/lib/routes";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -14,12 +15,8 @@ export default function RegisterPage() {
   const onFormSubmit = async (formData: FormData) => {
     try {
       setLoading(true);
-      console.log(formData.values());
-      const res = await fetch(API_ROUTES.users.create, {
+      const res = await fetcher(API_ROUTES.users.create, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
         body: JSON.stringify({
           email: formData.get("email"),
           password: formData.get("password"),
