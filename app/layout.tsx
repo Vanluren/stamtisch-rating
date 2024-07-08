@@ -1,8 +1,7 @@
-import { AppProps } from "next/app";
 import "./globals.css";
 import { Inter as FontSans } from "next/font/google";
-import { cn } from "@/lib/utils";
 import { Analytics } from "@vercel/analytics/react";
+import { Toaster } from "@/components/ui/sonner";
 
 const inter = FontSans({
   subsets: ["latin"],
@@ -18,7 +17,11 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <head />
       <Analytics />
-      <body className={`${inter.className} w-screen h-screen`}>{children}</body>
+
+      <body className={`${inter.className} w-screen h-screen`}>
+        {children}
+        <Toaster />
+      </body>
     </html>
   );
 }

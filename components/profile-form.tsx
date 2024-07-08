@@ -7,6 +7,7 @@ import { Label } from "@radix-ui/react-label";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { useState } from "react";
+import { toast } from "sonner";
 
 export default function ProfileForm({
   user,
@@ -30,9 +31,9 @@ export default function ProfileForm({
         },
       );
 
-      return;
+      return toast.success("Profile updated successfully");
     } catch (error) {
-      console.error(error);
+      return toast.error("Failed to update profile");
     } finally {
       setLoading(false);
     }
@@ -91,8 +92,8 @@ export default function ProfileForm({
         </div>
       </div>
       <div>
-        <Button type="submit" className="w-full" loading={loading}>
-          Save Changes
+        <Button type="submit" className="w-full">
+          {loading ? "Loading..." : "Update Profile"}
         </Button>
       </div>
     </form>
