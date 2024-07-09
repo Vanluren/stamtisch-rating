@@ -1,6 +1,6 @@
 import prisma from "@/lib/prisma";
 import { Profile } from "@prisma/client";
-import { NextRequest } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
 export async function PUT(
   request: NextRequest,
@@ -25,16 +25,20 @@ export async function PUT(
     });
 
     if (!profile) {
-      return Response.json({
-        status: 404,
-        message: "Profile not found",
-      });
+      return NextResponse.json(
+        {
+          message: "Profile not found",
+        },
+        { status: 404 },
+      );
     }
 
-    return Response.json({
-      status: 200,
-      profile,
-    });
+    return NextResponse.json(
+      {
+        profile,
+      },
+      { status: 200 },
+    );
   } catch (error) {
     return NextResponse.json(
       {

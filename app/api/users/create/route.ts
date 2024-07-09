@@ -7,44 +7,27 @@ const hashPassword = async (password: string) => {
   return hash(password, salt);
 };
 
-export async function GET() {
-  return NextResponse.json({
-    status: 405,
-    message: "Method not allowed",
-  });
-}
-
-export async function PUT() {
-  return NextResponse.json({
-    status: 405,
-    message: "Method not allowed",
-  });
-}
-
-export async function PATCH() {
-  return NextResponse.json({
-    status: 405,
-    message: "Method not allowed",
-  });
-}
-
 export async function POST(request: NextRequest, _: NextResponse) {
   try {
     const body = await request.json();
     const { email, password, firstName, lastName } = body;
 
     if (!email || !password || !firstName || !lastName) {
-      return NextResponse.json({
-        status: 400,
-        error: "Missing required fields",
-      });
+      return NextResponse.json(
+        {
+          error: "Missing required fields",
+        },
+        { status: 400 },
+      );
     }
 
     if (await prisma.user.findUnique({ where: { email } })) {
-      return NextResponse.json({
-        status: 400,
-        error: "User with this email already exists",
-      });
+      return NextResponse.json(
+        {
+          error: "User with this email already exists",
+        },
+        { status: 400 },
+      );
     }
 
     const hashedPassword = await hashPassword(password);
@@ -80,15 +63,19 @@ export async function POST(request: NextRequest, _: NextResponse) {
       return user;
     });
 
-    return NextResponse.json({
-      status: 200,
-      user,
-    });
+    return NextResponse.json(
+      {
+        user,
+      },
+      { status: 200 },
+    );
   } catch (error) {
     console.error(error);
-    return NextResponse.json({
-      status: 500,
-      error: "Error creating user",
-    });
+    return NextResponse.json(
+      {
+        error: "Error creating user",
+      },
+      { status: 500 },
+    );
   }
 }

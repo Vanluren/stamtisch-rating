@@ -9,28 +9,34 @@ export async function POST(request: NextRequest, _: NextResponse) {
     const { email, password } = body;
 
     if (!email || !password) {
-      return NextResponse.json({
-        status: 400,
-        error: "Missing required fields",
-      });
+      return NextResponse.json(
+        {
+          error: "Missing required fields",
+        },
+        { status: 400 },
+      );
     }
 
     const user = await prisma.user.findUnique({ where: { email } });
 
     if (!user) {
-      return NextResponse.json({
-        status: 400,
-        error: "User not found",
-      });
+      return NextResponse.json(
+        {
+          error: "User not found",
+        },
+        { status: 400 },
+      );
     }
 
     const passwordMatch = await compare(password, user.password);
 
     if (!passwordMatch) {
-      return NextResponse.json({
-        status: 400,
-        error: "Bad Request",
-      });
+      return NextResponse.json(
+        {
+          error: "Bad Request",
+        },
+        { status: 400 },
+      );
     }
 
     cookies().set("currentUser", user.id, {
@@ -39,15 +45,19 @@ export async function POST(request: NextRequest, _: NextResponse) {
       sameSite: "strict",
     });
 
-    return NextResponse.json({
-      status: 200,
-      ok: true,
-    });
+    return NextResponse.json(
+      {
+        ok: true,
+      },
+      { status: 200 },
+    );
   } catch (error) {
-    return NextResponse.json({
-      status: 500,
-      error: "Internal server error",
-      stack: error,
-    });
+    return NextResponse.json(
+      {
+        error: "Internal server error",
+        stack: error,
+      },
+      { status: 500 },
+    );
   }
 }
