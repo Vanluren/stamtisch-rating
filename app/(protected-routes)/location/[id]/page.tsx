@@ -3,12 +3,6 @@ import { StarIcon } from "lucide-react";
 import Image from "next/image";
 
 export default function LocationPage({ params }: { params: { id: string } }) {
-  const location = fetch(`/api/locations/${params.id}`).then((res) =>
-    res.json(),
-  );
-
-  console.log(location);
-
   return (
     <div className="container mx-auto max-w-4xl px-4 py-8 sm:px-6 lg:px-8">
       <div className="grid grid-cols-1 gap-8 sm:grid-cols-2">

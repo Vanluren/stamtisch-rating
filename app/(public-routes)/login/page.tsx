@@ -6,12 +6,13 @@ import { useState } from "react";
 import { API_ROUTES, ROUTES } from "@/lib/routes";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { Label } from "@/components/ui/label";
 import { fetcher } from "@/lib/fetch";
+import { toast } from "sonner";
 
 export default function LoginPage() {
   const [loading, setLoading] = useState(false);
   const { replace } = useRouter();
+
   const onFormSubmit = async (formData: FormData) => {
     try {
       setLoading(true);
@@ -23,14 +24,17 @@ export default function LoginPage() {
         }),
       });
 
-      if (res.ok) {
+      if (!res.error) {
+        setLoading(false);
+        toast.success("Logged in successfully!");
         return replace(ROUTES.HOME);
       }
     } catch (error) {
-    } finally {
       setLoading(false);
+      return toast.error("Something went wrong, please try again.");
     }
   };
+
   return (
     <div className="lg:p-8 flex flex-col h-full  justify-center mx-auto">
       <form

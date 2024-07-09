@@ -9,7 +9,7 @@ export async function POST(request: NextRequest, _: NextResponse) {
     const { email, password } = body;
 
     if (!email || !password) {
-      return Response.json({
+      return NextResponse.json({
         status: 400,
         error: "Missing required fields",
       });
@@ -18,7 +18,7 @@ export async function POST(request: NextRequest, _: NextResponse) {
     const user = await prisma.user.findUnique({ where: { email } });
 
     if (!user) {
-      return Response.json({
+      return NextResponse.json({
         status: 400,
         error: "User not found",
       });
@@ -27,9 +27,9 @@ export async function POST(request: NextRequest, _: NextResponse) {
     const passwordMatch = await compare(password, user.password);
 
     if (!passwordMatch) {
-      return Response.json({
+      return NextResponse.json({
         status: 400,
-        error: "Invalid password",
+        error: "Bad Request",
       });
     }
 
@@ -39,13 +39,16 @@ export async function POST(request: NextRequest, _: NextResponse) {
       sameSite: "strict",
     });
 
-    return Response.json({
+    return NextResponse.json({
       status: 200,
+      ok: true,
     });
   } catch (error) {
-    return Response.json({
+    console.log(error);
+    return NextResponse.json({
       status: 500,
       error: "Internal server error",
+      stack: error,
     });
   }
 }
