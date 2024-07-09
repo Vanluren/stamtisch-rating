@@ -8,21 +8,21 @@ const hashPassword = async (password: string) => {
 };
 
 export async function GET() {
-  return Response.json({
+  return NextResponse.json({
     status: 405,
     message: "Method not allowed",
   });
 }
 
 export async function PUT() {
-  return Response.json({
+  return NextResponse.json({
     status: 405,
     message: "Method not allowed",
   });
 }
 
 export async function PATCH() {
-  return Response.json({
+  return NextResponse.json({
     status: 405,
     message: "Method not allowed",
   });
@@ -34,14 +34,14 @@ export async function POST(request: NextRequest, _: NextResponse) {
     const { email, password, firstName, lastName } = body;
 
     if (!email || !password || !firstName || !lastName) {
-      return Response.json({
+      return NextResponse.json({
         status: 400,
         error: "Missing required fields",
       });
     }
 
     if (await prisma.user.findUnique({ where: { email } })) {
-      return Response.json({
+      return NextResponse.json({
         status: 400,
         error: "User with this email already exists",
       });
@@ -80,13 +80,13 @@ export async function POST(request: NextRequest, _: NextResponse) {
       return user;
     });
 
-    return Response.json({
+    return NextResponse.json({
       status: 200,
       user,
     });
   } catch (error) {
     console.error(error);
-    return Response.json({
+    return NextResponse.json({
       status: 500,
       error: "Error creating user",
     });

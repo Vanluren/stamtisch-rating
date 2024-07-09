@@ -1,5 +1,5 @@
 import prisma from "@/lib/prisma";
-import { Profile, User } from "@prisma/client";
+import { Profile } from "@prisma/client";
 import { NextRequest } from "next/server";
 
 export async function PUT(
@@ -36,6 +36,11 @@ export async function PUT(
       profile,
     });
   } catch (error) {
-    console.error(error);
+    return NextResponse.json(
+      {
+        message: "Internal server error",
+      },
+      { status: 500 },
+    );
   }
 }

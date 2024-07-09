@@ -15,25 +15,28 @@ const avatarSize = {
 };
 
 type UserAvatarProps = {
+  type: "upload" | "link";
   size?: keyof typeof avatarSize;
 };
 
 export default async function UserAvatar({ size = "medium" }: UserAvatarProps) {
   const currentUser = cookies().get("currentUser")?.value ?? "";
 
-  const { user } = await fetcher<User & { profile: Profile }>(
+  const {
+    user: { profile },
+  } = await fetcher<{ user: User & { profile: Profile } }>(
     API_ROUTES.users.fetchById.replace(":id", currentUser),
     { method: "GET" },
   );
 
   const userInitials =
-    `${user.profile.firstName[0]}${user.profile.lastName[0]}`.toUpperCase();
-  const userFullName = `${user.profile.firstName} ${user.profile.lastName}`;
+    `${profile.firstName[0]}${profile.lastName[0]}`.toUpperCase();
+  const userFullName = `${profile.firstName} ${profile.lastName}`;
 
   return (
     <Link href={ROUTES.PROFILE.INDEX}>
       <Avatar className={cn(avatarSize[size])}>
-        <AvatarImage src={user.profile.avatar ?? ""} alt={userFullName} />
+        <AvatarImage src={profile.avatar ?? ""} alt={userFullName} />
         <AvatarFallback>{userInitials}</AvatarFallback>
       </Avatar>
     </Link>

@@ -1,6 +1,6 @@
 import prisma from "@/lib/prisma";
 import { User } from "@prisma/client";
-import { NextRequest } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(
   _: NextRequest,
@@ -17,16 +17,10 @@ export async function GET(
   });
 
   if (!user) {
-    return Response.json({
-      status: 404,
-      message: "User not found",
-    });
+    return NextResponse.json({ message: "User not found" }, { status: 404 });
   }
 
-  return Response.json({
-    status: 200,
-    user,
-  });
+  return NextResponse.json({ user }, { status: 200 });
 }
 
 export async function PUT(
@@ -44,16 +38,20 @@ export async function PUT(
   });
 
   if (!user) {
-    return Response.json({
-      status: 404,
-      message: "User not found",
-    });
+    return NextResponse.json(
+      {
+        message: "User not found",
+      },
+      { status: 404 },
+    );
   }
 
-  return Response.json({
-    status: 200,
-    user,
-  });
+  return NextResponse.json(
+    {
+      user,
+    },
+    { status: 200 },
+  );
 }
 
 export async function DELETE(
@@ -68,14 +66,18 @@ export async function DELETE(
   });
 
   if (!user) {
-    return Response.json({
-      status: 404,
-      message: "User not found",
-    });
+    return NextResponse.json(
+      {
+        message: "User not found",
+      },
+      { status: 404 },
+    );
   }
 
-  return Response.json({
-    status: 200,
-    user,
-  });
+  return NextResponse.json(
+    {
+      user,
+    },
+    { status: 200 },
+  );
 }

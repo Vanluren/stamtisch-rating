@@ -4,9 +4,11 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { fetcher } from "@/lib/fetch";
 import { API_ROUTES, ROUTES } from "@/lib/routes";
+import { User, Profile } from "@prisma/client";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { toast } from "sonner";
 
 export default function RegisterPage() {
   const [loading, setLoading] = useState(false);
@@ -15,23 +17,28 @@ export default function RegisterPage() {
   const onFormSubmit = async (formData: FormData) => {
     try {
       setLoading(true);
-      const res = await fetcher(API_ROUTES.users.create, {
-        method: "POST",
-        body: JSON.stringify({
-          email: formData.get("email"),
-          password: formData.get("password"),
-          firstName: formData.get("first-name"),
-          lastName: formData.get("last-name"),
-        }),
-      });
+      const res = await fetcher<User & { profile: Profile }>(
+        API_ROUTES.users.create,
+        {
+          method: "POST",
+          body: JSON.stringify({
+            email: formData.get("email"),
+            password: formData.get("password"),
+            firstName: formData.get("first-name"),
+            lastName: formData.get("last-name"),
+          }),
+        },
+      );
 
-      if (res.ok) {
+      if (res.id) {
+        setLoading(false);
+        toast.success("Account created successfully. Please login.");
         return push(ROUTES.LOGIN);
       }
     } catch (error) {
-      console.error(error);
-    } finally {
       setLoading(false);
+      toast.error("An error occurred. Please try again later.");
+      return;
     }
   };
 

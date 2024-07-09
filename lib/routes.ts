@@ -26,6 +26,9 @@ export const API_ROUTES = {
     updateByUserId: "/profile/:id",
   },
   login: "/login",
+  blob: {
+    create: "/blob/create?filename=:filename",
+  },
 };
 
 export const PROTECTED_ROUTES = [ROUTES.HOME];

@@ -6,20 +6,58 @@ import { Profile, User } from "@prisma/client";
 import { Label } from "@radix-ui/react-label";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { toast } from "sonner";
+import { PutBlobResult } from "@vercel/blob";
 
 export default function ProfileForm({
   user,
 }: {
   user: User & { profile: Profile };
 }) {
+  const inputFileRef = useRef<HTMLInputElement>(null);
   const [loading, setLoading] = useState(false);
+
+  const _uploadProfileImage = async (
+    file: File,
+  ): Promise<PutBlobResult | undefined> => {
+    try {
+      if (!file) {
+        return;
+      }
+
+      const { blob } = await fetcher<{
+        status: number;
+        message: string;
+        blob: PutBlobResult;
+      }>(API_ROUTES.blob.create.replace(":filename", file.name), {
+        method: "POST",
+        body: file,
+      });
+
+      if (blob) {
+        console.log(blob);
+        return blob;
+      }
+    } catch (error) {
+      toast.error("Failed to upload avatar");
+      return;
+    }
+  };
 
   const onFormSubmit = async (formData: FormData) => {
     try {
       setLoading(true);
-      await fetcher<User & { profile: Profile }>(
+      let avatarBlobUrl;
+
+      if (inputFileRef.current?.files) {
+        const avatarBlob = await _uploadProfileImage(
+          inputFileRef.current.files[0],
+        );
+        avatarBlobUrl = avatarBlob?.url;
+      }
+
+      const { id } = await fetcher<User & { profile: Profile }>(
         API_ROUTES.profile.updateByUserId.replace(":id", user.profile.id),
         {
           method: "PUT",
@@ -27,11 +65,15 @@ export default function ProfileForm({
             firstName: formData.get("first-name"),
             lastName: formData.get("last-name"),
             bio: formData.get("bio"),
+            avatar: avatarBlobUrl,
           }),
         },
       );
 
-      return toast.success("Profile updated successfully");
+      if (id) {
+        toast.success("Profile updated successfully");
+        return;
+      }
     } catch (error) {
       return toast.error("Failed to update profile");
     } finally {
@@ -53,6 +95,10 @@ export default function ProfileForm({
             defaultValue={user.email}
             disabled
           />
+        </div>
+        <div>
+          <Label htmlFor="avatar">Avatar</Label>
+          <Input ref={inputFileRef} name="avatar" type="file" />
         </div>
         <div className="grid grid-cols-2 gap-4">
           <div>
