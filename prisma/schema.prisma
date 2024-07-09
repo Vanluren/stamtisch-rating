@@ -60,7 +60,7 @@ model ReviewLocation {
   address   String
   latitude  Float
   longitude Float
-  placeId   String?
+  placeId   String   @unique
   reviews   Review[]
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

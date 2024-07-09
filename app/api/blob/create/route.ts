@@ -15,8 +15,7 @@ const slugify = (text: string) =>
 
 export async function POST({ body, url }: NextRequest) {
   try {
-    const { searchParams } = new URL(url);
-    const filename = searchParams.get("filename");
+    const filename = new URL(url).searchParams.get("filename");
     const currentUser = cookies().get("currentUser")?.value;
 
     if (!filename) {

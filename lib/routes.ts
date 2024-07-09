@@ -29,6 +29,9 @@ export const API_ROUTES = {
   blob: {
     create: "/blob/create?filename=:filename",
   },
+  locations: {
+    search: "/locations/search",
+  },
 };
 
 export const PROTECTED_ROUTES = [ROUTES.HOME];
