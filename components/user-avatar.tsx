@@ -35,7 +35,9 @@ export default async function UserAvatar({ size = "medium" }: UserAvatarProps) {
 
   return (
     <Link href={ROUTES.PROFILE.INDEX}>
-      <Avatar className={cn(avatarSize[size])}>
+      <Avatar
+        className={cn(avatarSize[size], "flex items-center justify-center")}
+      >
         <AvatarImage src={profile.avatar ?? ""} alt={userFullName} />
         <AvatarFallback>{userInitials}</AvatarFallback>
       </Avatar>
