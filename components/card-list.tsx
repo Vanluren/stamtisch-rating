@@ -1,6 +1,5 @@
 import Link from "next/link";
 import ReviewCard from "./review-card";
-import { ROUTES } from "@/lib/routes";
 
 type CardListProps = {
   title: string;
@@ -15,7 +14,7 @@ export function CardList({ title }: CardListProps) {
             <div className="flex items-center justify-between mb-6">
               <h2 className="text-2xl font-bold tracking-tight">{title}</h2>
               <Link
-                href={`${ROUTES.REVIEWS}`}
+                href="#"
                 className="text-sm font-medium hover:underline text-secondary-foreground"
                 prefetch={false}
               >

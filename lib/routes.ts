@@ -12,7 +12,7 @@ export const ROUTES = {
     single: (id: string) => "/profile/" + id,
   },
   location: (id: string) => "/location/" + id,
-} as const;
+};
 
 export const API_ROUTES = {
   users: {
@@ -36,6 +36,6 @@ export const API_ROUTES = {
     fetchByLocationId: "/review/location/:id",
     fetchByUserId: "/review/user/:id",
   },
-} as const;
+};
 
 export const PROTECTED_ROUTES = [ROUTES.home];
