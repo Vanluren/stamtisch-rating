@@ -43,7 +43,7 @@ export default function RegisterPage() {
   };
 
   return (
-    <div className="lg:p-8 flex flex-col mx-auto">
+    <div className="lg:p-8 flex flex-col mx-auto h-full items-center justify-center">
       <form
         action={onFormSubmit}
         className=" flex w-full flex-col justify-center space-y-6 sm:w-[350px] relative"
