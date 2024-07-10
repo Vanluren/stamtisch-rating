@@ -2,13 +2,16 @@
 
 import { debounce, isEmpty } from "lodash-es";
 import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { PlusIcon } from "lucide-react";
 import { API_ROUTES, ROUTES } from "@/lib/routes";
-import Link from "next/dist/client/link";
 import { fetcher } from "@/lib/fetch";
-import { ChangeEventHandler, useState } from "react";
-import { Review, ReviewLocation } from "@prisma/client";
+import { useState } from "react";
+import { ReviewLocation } from "@prisma/client";
+import {
+  Command,
+  CommandEmpty,
+  CommandInput,
+  CommandList,
+} from "@/components/ui/command";
 
 export default function SearchHero() {
   const [locations, setLocations] = useState<ReviewLocation[] | null>();
@@ -18,12 +21,15 @@ export default function SearchHero() {
     try {
       if (isEmpty(query)) return;
 
-      const res = await fetcher<ReviewLocation[]>(API_ROUTES.locations.search, {
-        query: {
-          query,
+      const { locations } = await fetcher<{ locations: ReviewLocation[] }>(
+        API_ROUTES.locations.search,
+        {
+          query: {
+            query,
+          },
         },
-      });
-      setLocations(res);
+      );
+      setLocations(locations);
       return;
     } catch (error) {
       console.error(error);
@@ -44,13 +50,18 @@ export default function SearchHero() {
             ratings and reviews.
           </p>
           <div className="flex flex-col sm:flex-col items-center gap-4 w-full max-w-xl mx-auto">
-            <Input
-              type="text"
-              placeholder="Search for bars..."
-              className="flex-1 w-full text-primary-background"
-              onChange={(e) => debouncedSearch(e.target.value)}
-              loading={loading}
-            />
+            <Command>
+              <CommandInput
+                placeholder="Search for bars..."
+                onValueChange={debouncedSearch}
+              />
+
+              <CommandList>
+                {locations?.length === 0 && (
+                  <CommandEmpty>No results found.</CommandEmpty>
+                )}
+              </CommandList>
+            </Command>
 
             <div className="hidden relative w-full items-center before:content-[''] before:bg-gray-400 before:w-[45%] before:h-[.5px] before:absolute before:left-0 before:top-[12px] after:content-[''] after:bg-gray-400 after:w-[45%] after:h-[.5px] after:absolute after:right-0 after:top-[12px]">
               <div className="mx-2 text-gray-400">OR</div>
