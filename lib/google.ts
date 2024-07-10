@@ -4,7 +4,7 @@ const API_KEY = process.env.GOOGLE_API_KEY ?? "";
 
 export async function googlePlacesTextSearch(
   textQuery: string,
-): Promise<GooglePlace[]> {
+): Promise<GooglePlace[] | undefined> {
   const url = new URL("https://places.googleapis.com/v1/places:searchText");
   const headers = new Headers();
   headers.set("X-Goog-Api-Key", API_KEY);
@@ -19,6 +19,10 @@ export async function googlePlacesTextSearch(
     headers,
     body: JSON.stringify({
       textQuery,
+      includedType: "bar",
+      pageSize: 5,
+      regionCode: "DK",
+      languageCode: "da",
     }),
   });
 

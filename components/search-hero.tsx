@@ -1,44 +1,19 @@
 "use client";
 
-import { debounce, isEmpty } from "lodash-es";
-import { API_ROUTES, ROUTES } from "@/lib/routes";
-import { fetcher } from "@/lib/fetch";
-import { useState } from "react";
-import { ReviewLocation } from "@prisma/client";
-import {
-  Command,
-  CommandEmpty,
-  CommandInput,
-  CommandList,
-} from "@/components/ui/command";
+import { ROUTES } from "@/lib/routes";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { PlusIcon } from "lucide-react";
+import LocationSearchInput from "./location-search-input";
+import { ReviewLocation } from "@prisma/client";
+import { useRouter } from "next/navigation";
 
 export default function SearchHero() {
-  const [locations, setLocations] = useState<ReviewLocation[] | null>();
-  const [loading, setLoading] = useState(false);
+  const router = useRouter();
 
-  const onSearchChange = async (query: string) => {
-    try {
-      if (isEmpty(query)) return;
-
-      const { locations } = await fetcher<{ locations: ReviewLocation[] }>(
-        API_ROUTES.locations.search,
-        {
-          query: {
-            query,
-          },
-        },
-      );
-      setLocations(locations);
-      return;
-    } catch (error) {
-      console.error(error);
-    }
+  const onLocationSelect = ({ id }: ReviewLocation) => {
+    return router.push(ROUTES.location(id));
   };
-
-  const debouncedSearch = debounce((input) => onSearchChange(input), 500);
 
   return (
     <header className="bg-secondary  py-12 md:py-20">
@@ -51,19 +26,8 @@ export default function SearchHero() {
             Find the perfect stamtisch for any occasion with our comprehensive
             ratings and reviews.
           </p>
-          <div className="flex flex-col sm:flex-col items-center gap- w-full max-w-xl mx-auto">
-            <Command>
-              <CommandInput
-                placeholder="Search for bars..."
-                onValueChange={debouncedSearch}
-              />
-
-              <CommandList>
-                {locations?.length === 0 && (
-                  <CommandEmpty>No results found.</CommandEmpty>
-                )}
-              </CommandList>
-            </Command>
+          <div className="flex flex-col sm:flex-col items-center gap- w-full max-w-xl mx-auto relative overflow-hidden">
+            <LocationSearchInput onSelect={onLocationSelect} />
           </div>
           <div className="relative w-full items-center before:content-[''] before:bg-gray-400 before:w-[45%] before:h-[.5px] before:absolute before:left-0 before:top-[12px] after:content-[''] after:bg-gray-400 after:w-[45%] after:h-[.5px] after:absolute after:right-0 after:top-[12px] mb-6">
             <span className="mx-2 text-gray-400">OR</span>

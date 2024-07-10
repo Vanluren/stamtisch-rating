@@ -16,8 +16,17 @@ export async function GET({ url }: NextRequest) {
 
     const response = await googlePlacesTextSearch(query);
 
+    if (!response) {
+      return NextResponse.json(
+        {
+          message: "No locations found",
+        },
+        { status: 404 },
+      );
+    }
+
     const locations = await Promise.all(
-      response.map(async (place) => {
+      response?.map(async (place) => {
         const existingLocation = await prisma.reviewLocation.findFirst({
           where: {
             placeId: place.id,
@@ -42,6 +51,7 @@ export async function GET({ url }: NextRequest) {
 
     return NextResponse.json({ locations }, { status: 200 });
   } catch (e) {
+    console.error(e);
     return NextResponse.json(
       {
         message: "Something went wrong",

@@ -30,6 +30,12 @@ export const API_ROUTES = {
   locations: {
     search: "/locations/search",
   },
+  review: {
+    create: "/review/create",
+    fetchById: "/review/:id",
+    fetchByLocationId: "/review/location/:id",
+    fetchByUserId: "/review/user/:id",
+  },
 } as const;
 
 export const PROTECTED_ROUTES = [ROUTES.home];
