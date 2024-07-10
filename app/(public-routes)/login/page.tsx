@@ -8,6 +8,7 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { fetcher } from "@/lib/fetch";
 import { toast } from "sonner";
+import { POST } from "@/app/api/login/route";
 
 export default function LoginPage() {
   const [loading, setLoading] = useState(false);
@@ -16,7 +17,7 @@ export default function LoginPage() {
   const onFormSubmit = async (formData: FormData) => {
     try {
       setLoading(true);
-      const res = await fetcher(API_ROUTES.login, {
+      const res = await fetcher<ReturnType<typeof POST>>(API_ROUTES.login, {
         method: "POST",
         body: JSON.stringify({
           email: formData.get("email"),
@@ -24,7 +25,7 @@ export default function LoginPage() {
         }),
       });
 
-      if (!res.error) {
+      if (res.ok) {
         setLoading(false);
         toast.success("Logged in successfully!");
         return replace(ROUTES.HOME);

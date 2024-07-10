@@ -15,7 +15,6 @@ const avatarSize = {
 };
 
 type UserAvatarProps = {
-  type: "upload" | "link";
   size?: keyof typeof avatarSize;
 };
 

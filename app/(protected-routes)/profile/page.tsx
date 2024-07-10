@@ -8,7 +8,7 @@ import ProfileForm from "@/components/profile-form";
 export default async function MyProfilePage() {
   const currentUser = cookies().get("currentUser")?.value ?? "";
 
-  const { user } = await fetcher<User & { profile: Profile }>(
+  const { user } = await fetcher<{ user: User & { profile: Profile } }>(
     API_ROUTES.users.fetchById.replace(":id", currentUser),
     { method: "GET", next: { tags: ["user"] } },
   );
@@ -18,7 +18,7 @@ export default async function MyProfilePage() {
       <div className="w-full max-w-md space-y-8">
         <div className="flex flex-col items-center">
           <div className="flex items-center">
-            <UserAvatar type="upload" size="xl" />
+            <UserAvatar size="xl" />
           </div>
           <div className="mt-6">
             <h2 className="text-3xl font-bold tracking-tight text-foreground capitalize">

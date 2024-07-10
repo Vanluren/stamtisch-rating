@@ -1,5 +1,5 @@
 type RequestOptions = RequestInit & {
-  query: Record<string, string | number | boolean>;
+  query?: Record<string, string | number | boolean>;
 };
 
 const addQueryParams = (
