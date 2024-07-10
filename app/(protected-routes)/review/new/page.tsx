@@ -4,12 +4,11 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { fetcher } from "@/lib/fetch";
 import { ReviewLocation } from "@prisma/client";
 import { useState } from "react";
 import { toast } from "sonner";
 
-export default function NewReviewPage({ params: { locationId } }) {
+export default function NewReviewPage() {
   const [loading, setLoading] = useState(false);
   const [location, setLocation] = useState<ReviewLocation | null>(null);
 
@@ -20,7 +19,10 @@ export default function NewReviewPage({ params: { locationId } }) {
       const rating = formData.get("rating");
       const comment = formData.get("comment");
 
-      const {ok} = fetcher(, options)
+      alert(
+        `Submitting review for location ${locationId} with rating ${rating} and comment ${comment}`,
+      );
+
       setLoading(false);
       toast.success("Review submitted successfully");
       return;
