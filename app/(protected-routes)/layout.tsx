@@ -11,7 +11,7 @@ export default function ProtectedRoutesLayout({
   return (
     <div>
       <nav className="flex items-center flex-row justify-between pt-4 pb-2 px-3 bg-secondary">
-        <Link href={ROUTES.HOME}>
+        <Link href={ROUTES.home}>
           <BeerIcon className="w-8 h-8 m-2" />
         </Link>
         <UserAvatar size="small" />

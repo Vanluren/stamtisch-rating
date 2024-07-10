@@ -33,7 +33,7 @@ export default function RegisterPage() {
       if (res.id) {
         setLoading(false);
         toast.success("Account created successfully. Please login.");
-        return push(ROUTES.LOGIN);
+        return push(ROUTES.login);
       }
     } catch (error) {
       setLoading(false);
@@ -88,7 +88,7 @@ export default function RegisterPage() {
       </form>
       <div className="mt-4 flex flex-row justify-end gap-2">
         <span className="text-gray-400 ">Already have an account?</span>
-        <Link href={ROUTES.LOGIN} className="text-primary underline">
+        <Link href={ROUTES.login} className="text-primary underline">
           Login here
         </Link>
       </div>

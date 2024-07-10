@@ -7,17 +7,17 @@ const checkProtectedRoutes = (req: NextRequest) => {
   if (PROTECTED_ROUTES.includes(req.nextUrl.pathname) && !currentUser) {
     req.cookies.delete("currentUser");
     const response = NextResponse.redirect(
-      new URL(ROUTES.LOGIN, req.nextUrl.origin).href,
+      new URL(ROUTES.login, req.nextUrl.origin).href,
     );
 
     return response;
   }
   if (
-    [ROUTES.LOGIN, ROUTES.REGISTER].includes(req.nextUrl.pathname) &&
+    [ROUTES.login, ROUTES.register].includes(req.nextUrl.pathname) &&
     currentUser
   ) {
     const response = NextResponse.redirect(
-      new URL(ROUTES.HOME, req.nextUrl.origin).href,
+      new URL(ROUTES.home, req.nextUrl.origin).href,
     );
 
     return response;

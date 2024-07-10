@@ -28,7 +28,7 @@ export default function LoginPage() {
       if (res.ok) {
         setLoading(false);
         toast.success("Logged in successfully!");
-        return replace(ROUTES.HOME);
+        return replace(ROUTES.home);
       }
     } catch (error) {
       setLoading(false);
@@ -65,7 +65,7 @@ export default function LoginPage() {
       </form>
       <div className="mt-4 flex flex-row justify-end gap-2">
         <span className="text-gray-400 ">Don&apos;t have an account?</span>
-        <Link href={ROUTES.REGISTER} className="text-primary underline">
+        <Link href={ROUTES.register} className="text-primary underline">
           Register here
         </Link>
       </div>

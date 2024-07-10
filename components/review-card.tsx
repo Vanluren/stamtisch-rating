@@ -37,7 +37,7 @@ export default function ReviewCard({
   images,
 }: ReviewCardProps) {
   return (
-    <Link href={ROUTES.LOCATION(id)}>
+    <Link href={ROUTES.location(id)}>
       <Card className="cursor-pointer">
         <CardContent className="p-4">
           <div className="flex items-center justify-between mb-2">

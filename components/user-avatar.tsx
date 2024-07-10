@@ -33,7 +33,7 @@ export default async function UserAvatar({ size = "medium" }: UserAvatarProps) {
   const userFullName = `${profile.firstName} ${profile.lastName}`;
 
   return (
-    <Link href={ROUTES.PROFILE.INDEX}>
+    <Link href={ROUTES.profile.index}>
       <Avatar
         className={cn(avatarSize[size], "flex items-center justify-center")}
       >
