@@ -17,20 +17,20 @@ export default function RegisterPage() {
   const onFormSubmit = async (formData: FormData) => {
     try {
       setLoading(true);
-      const res = await fetcher<User & { profile: Profile }>(
-        API_ROUTES.users.create,
-        {
-          method: "POST",
-          body: JSON.stringify({
-            email: formData.get("email"),
-            password: formData.get("password"),
-            firstName: formData.get("first-name"),
-            lastName: formData.get("last-name"),
-          }),
-        },
-      );
+      const res = await fetcher<{
+        ok: boolean;
+        user: User & { profile: Profile };
+      }>(API_ROUTES.users.create, {
+        method: "POST",
+        body: JSON.stringify({
+          email: formData.get("email"),
+          password: formData.get("password"),
+          firstName: formData.get("first-name"),
+          lastName: formData.get("last-name"),
+        }),
+      });
 
-      if (res.id) {
+      if (res.ok) {
         setLoading(false);
         toast.success("Account created successfully. Please login.");
         return push(ROUTES.login);
