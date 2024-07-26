@@ -1,13 +1,31 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { fetcher } from "@/lib/fetch";
+import { API_ROUTES } from "@/lib/routes";
+import { ReviewLocation } from "@prisma/client";
 import { StarIcon } from "lucide-react";
 import Image from "next/image";
 
-export default function LocationPage({ params }: { params: { id: string } }) {
+export default async function LocationPage({
+  params,
+}: {
+  params: { id: string };
+}) {
+  const { location } = await fetcher<{ location: ReviewLocation, placeInfo:  }>(
+    API_ROUTES.locations.fetchById.replace(":id", params.id),
+    {
+      method: "GET",
+    },
+  );
+
+  if (!location) {
+    return;
+  }
+
   return (
     <div className="container mx-auto max-w-4xl px-4 py-8 sm:px-6 lg:px-8">
       <div className="grid grid-cols-1 gap-8 sm:grid-cols-2">
         <div>
-          <h1 className="text-3xl font-bold">The Cozy Pub</h1>
+          <h1 className="text-3xl font-bold">{location.name}</h1>
           <div className="mt-4 flex items-center">
             <div className="flex items-center gap-1">
               <StarIcon className="h-6 w-6 fill-primary" />
