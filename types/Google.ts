@@ -12,3 +12,12 @@ export type GooglePlace = {
     longitude: number;
   };
 };
+
+export type GooglePlaceDetails = {
+  placeId: string;
+  photos: string[];
+  rating: number;
+  googleMapsUri: string;
+  websiteUri: string;
+  reviews: {};
+};
