@@ -51,7 +51,6 @@ export async function GET({ url }: NextRequest) {
 
     return NextResponse.json({ locations }, { status: 200 });
   } catch (e) {
-    console.error(e);
     return NextResponse.json(
       {
         message: "Something went wrong",
