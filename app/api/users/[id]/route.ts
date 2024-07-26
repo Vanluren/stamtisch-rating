@@ -48,6 +48,7 @@ export async function PUT(
 
   return NextResponse.json(
     {
+      ok: true,
       user,
     },
     { status: 200 },
