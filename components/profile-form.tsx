@@ -36,11 +36,10 @@ export default function ProfileForm({
       });
 
       if (blob) {
-        console.log(blob);
         return blob;
       }
     } catch (error) {
-      toast.error("Failed to upload avatar");
+      toast.error("Failed to upload profile image");
       return;
     }
   };
@@ -57,22 +56,21 @@ export default function ProfileForm({
         avatarBlobUrl = avatarBlob?.url;
       }
 
-      const { id } = await fetcher<User & { profile: Profile }>(
-        API_ROUTES.profile.updateByUserId.replace(":id", user.profile.id),
-        {
-          method: "PUT",
-          body: JSON.stringify({
-            firstName: formData.get("first-name"),
-            lastName: formData.get("last-name"),
-            bio: formData.get("bio"),
-            avatar: avatarBlobUrl,
-          }),
-        },
-      );
+      const { ok } = await fetcher<{
+        ok: boolean;
+        user: User & { profile: Profile };
+      }>(API_ROUTES.profile.updateByUserId.replace(":id", user.profile.id), {
+        method: "PUT",
+        body: JSON.stringify({
+          firstName: formData.get("first-name"),
+          lastName: formData.get("last-name"),
+          bio: formData.get("bio"),
+          avatar: avatarBlobUrl,
+        }),
+      });
 
-      if (id) {
-        toast.success("Profile updated successfully");
-        return;
+      if (ok) {
+        return toast.success("Profile updated successfully");
       }
     } catch (error) {
       return toast.error("Failed to update profile");
