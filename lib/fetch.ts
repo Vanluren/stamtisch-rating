@@ -15,17 +15,24 @@ export async function fetcher<Res>(
   endpoint: string,
   options: RequestOptions,
 ): Promise<Res> {
-  const url = new URL(process.env.NEXT_PUBLIC_API_URL + endpoint);
+  try {
+    const url = new URL(process.env.NEXT_PUBLIC_API_URL + endpoint);
 
-  if (options.query) addQueryParams(url, options.query);
+    if (options.query) addQueryParams(url, options.query);
 
-  const apiResponse = await fetch(url.toString(), {
-    ...options,
-    headers: {
-      ...options.headers,
-      "Content-Type": "application/json",
-    },
-  }).then((res) => res.json());
+    const apiResponse = await fetch(url.toString(), {
+      ...options,
+      headers: {
+        ...options.headers,
+        "Content-Type": "application/json",
+      },
+    });
 
-  return apiResponse;
+    const data = await apiResponse.json();
+
+    return data;
+  } catch (error) {
+    console.error(error);
+    throw new Error("Error fetching data", { cause: error });
+  }
 }
