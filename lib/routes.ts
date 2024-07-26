@@ -29,6 +29,7 @@ export const API_ROUTES = {
   },
   locations: {
     search: "/locations/search",
+    fetchById: "/locations/:id",
   },
   review: {
     create: "/review/create",
