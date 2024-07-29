@@ -35,12 +35,14 @@ export async function GET(
       );
     }
 
-
-    await fetcher()}
     return NextResponse.json({ location }, { status: 200 });
-  } catch (error) {
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      console.error(error.message, { stack: error.stack });
+    }
+
     return NextResponse.json(
-      { message: "Something went wrong", },
+      { message: "Something went wrong" },
       { status: 500 },
     );
   }

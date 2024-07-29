@@ -1,27 +1,40 @@
 "use client";
 import LocationSearchInput from "@/components/location-search-input";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { RatingInput } from "@/components/ui/rating-input";
 import { Textarea } from "@/components/ui/textarea";
 import { ReviewLocation } from "@prisma/client";
 import { useState } from "react";
 import { toast } from "sonner";
 
+type RatingInput = {
+  overall: number;
+  atmosphere: number;
+  cleanliness: number;
+  safety: number;
+};
+
 export default function NewReviewPage() {
   const [loading, setLoading] = useState(false);
-  const [location, setLocation] = useState<ReviewLocation | null>(null);
+  const [selectedLocation, setSelectedLocation] = useState<ReviewLocation>();
+  const [ratings, setRating] = useState<RatingInput>({
+    overall: 0,
+    atmosphere: 0,
+    cleanliness: 0,
+    safety: 0,
+  });
+
+  const updateRatingState = (ratingKey: keyof RatingInput, rating: number) => {
+    setRating({ ...ratings, [ratingKey]: rating });
+  };
 
   const handleSubmit = (formData: FormData) => {
     try {
       setLoading(true);
-      const locationId = formData.get("location");
-      const rating = formData.get("rating");
       const comment = formData.get("comment");
 
-      alert(
-        `Submitting review for location ${locationId} with rating ${rating} and comment ${comment}`,
-      );
+      console.log(ratings);
 
       setLoading(false);
       toast.success("Review submitted successfully");
@@ -37,29 +50,42 @@ export default function NewReviewPage() {
       <div className="w-full max-w-md space-y-8">
         <div className="flex flex-col">
           <h1
-            className={`text-3xl font-bold ${location ? "text-primary" : "text-gray-400"}`}
+            className={`text-3xl font-bold ${selectedLocation ? "text-primary" : "text-gray-400"}`}
           >
-            {location ? location.name : "Select a location"}
+            {selectedLocation ? selectedLocation.name : "Select a location"}
           </h1>
+          <p className="text-muted-foreground">
+            {selectedLocation ? selectedLocation.address : null}
+          </p>
         </div>
-
-        <form className="mt-8 space-y-6" action={handleSubmit}>
+        <form className="mt-8 space-y-6 relative" action={handleSubmit}>
           <div className="flex flex-col gap-4">
-            <div>
+            <div className="relative">
               <Label htmlFor="location">Location</Label>
               <LocationSearchInput
-                onSelect={(location) => setLocation(location)}
+                onSelect={(location) => setSelectedLocation(location)}
+                selectedLocation={selectedLocation}
               />
             </div>
 
-            <div>
-              <Label htmlFor="rating">Rating</Label>
-              <Input type="number" id="rating" min={1} max={10} />
-            </div>
+            {Object.entries(ratings).map(([key, value]) => (
+              <div key={key}>
+                <Label htmlFor="rating" className="capitalize">
+                  {key}
+                </Label>
+                <input type="hidden" name={key} value={value} />
+                <RatingInput
+                  onRatingChange={(val) =>
+                    updateRatingState(key as keyof RatingInput, val)
+                  }
+                  rating={value}
+                />
+              </div>
+            ))}
 
             <div>
               <Label htmlFor="comment">Comment</Label>
-              <Textarea id="comment" />
+              <Textarea id="comment" name="comment" />
             </div>
 
             <Button type="submit">

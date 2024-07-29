@@ -32,7 +32,6 @@ export async function fetcher<Res>(
 
     return data;
   } catch (error) {
-    console.error(error);
     throw new Error("Error fetching data", { cause: error });
   }
 }

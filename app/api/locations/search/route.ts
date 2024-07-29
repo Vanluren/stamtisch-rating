@@ -16,12 +16,15 @@ export async function GET({ url }: NextRequest) {
 
     const response = await googlePlacesTextSearch(query);
 
-    if (!response) {
+    if (!response?.length) {
       return NextResponse.json(
         {
           message: "No locations found",
+          locations: [],
         },
-        { status: 404 },
+        {
+          status: 200,
+        },
       );
     }
 
@@ -50,7 +53,10 @@ export async function GET({ url }: NextRequest) {
     );
 
     return NextResponse.json({ locations }, { status: 200 });
-  } catch (e) {
+  } catch (e: unknown) {
+    if (e instanceof Error) {
+      console.error(e.message, { stack: e.stack });
+    }
     return NextResponse.json(
       {
         message: "Something went wrong",

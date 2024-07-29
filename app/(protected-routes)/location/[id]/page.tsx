@@ -10,16 +10,12 @@ export default async function LocationPage({
 }: {
   params: { id: string };
 }) {
-  const { location } = await fetcher<{ location: ReviewLocation, placeInfo:  }>(
+  const { location } = await fetcher<{ location: ReviewLocation }>(
     API_ROUTES.locations.fetchById.replace(":id", params.id),
     {
       method: "GET",
     },
   );
-
-  if (!location) {
-    return;
-  }
 
   return (
     <div className="container mx-auto max-w-4xl px-4 py-8 sm:px-6 lg:px-8">

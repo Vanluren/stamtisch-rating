@@ -1,22 +1,23 @@
 "use client";
-import { CommandEmpty } from "@/components/ui/command";
 import { fetcher } from "@/lib/fetch";
 import { API_ROUTES } from "@/lib/routes";
 import { ReviewLocation } from "@prisma/client";
-import { CommandLoading } from "cmdk";
 import { debounce, isEmpty } from "lodash-es";
-import { useState } from "react";
+import { ReactElement, useRef, useState } from "react";
 import { toast } from "sonner";
 import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
 import { Input } from "./ui/input";
 import { cn } from "@/lib/utils";
+import { PopoverAnchor } from "@radix-ui/react-popover";
 
 type LocationSearchInputProps = {
   onSelect?: (location: ReviewLocation) => void;
+  selectedLocation?: ReviewLocation;
 };
 
 export default function LocationSearchInput({
   onSelect,
+  selectedLocation,
 }: LocationSearchInputProps) {
   const [foundLocations, setFoundLocations] = useState<
     ReviewLocation[] | null
@@ -41,12 +42,15 @@ export default function LocationSearchInput({
           },
         },
       );
-      setFoundLocations(locations);
+
+      setFoundLocations(locations ?? []);
       setIsListOpen(true);
       setLoading(false);
       return;
     } catch (error) {
       toast.error("Something went wrong with the search. Please try again.");
+      setLoading(false);
+      return;
     }
   };
 
@@ -61,30 +65,39 @@ export default function LocationSearchInput({
   );
 
   return (
-    <div className="relative w-full">
+    <div className="w-full max-w-full overflow-hidden">
       <Popover open={isListOpen} onOpenChange={setIsListOpen}>
-        <PopoverTrigger asChild>
+        <PopoverAnchor className="w-full min-w-38">
           <Input
             placeholder="Find your next stamtisch..."
-            type="search"
             onChange={debouncedSearch}
             className="w-full relative"
+            value={`${selectedLocation?.name}, ${selectedLocation?.address}`}
+            type="text"
           />
-        </PopoverTrigger>
+        </PopoverAnchor>
 
         <PopoverContent
           className={cn(
-            "animate-in fade-in-0 zoom-in-95  max-w-full w-full rounded-md bg-white outline-none shadow-sm overflow-hidden p-0",
+            "animate-in fade-in-0 zoom-in-95  w-[var(--radix-popover-trigger-width)] max-w-full min-h-16 rounded-md bg-white outline-none shadow-sm overflow-hidden p-0 relative flex h-full flex-col  bg-popover text-popover-foreground",
             isListOpen ? "block" : "hidden",
           )}
-          align="start"
+          align="center"
         >
-          {loading && <CommandLoading />}
-          {foundLocations?.length === 0 && <CommandEmpty />}
+          {loading && (
+            <div className="flex flex-col py-4 px-4">
+              <span>Loading...</span>
+            </div>
+          )}
+          {foundLocations?.length === 0 && (
+            <div className="flex flex-col py-4 px-4 justify-center items-center text-gray-400">
+              <span>No locations found</span>
+            </div>
+          )}
           {foundLocations?.map((location) => (
             <div
               key={location.id}
-              className="hover:bg-gray-50 flex flex-col py-4 px-4"
+              className="hover:bg-gray-50 flex flex-col py-4 px-4 cursor-pointer"
               onSelect={() => onSelectLocation(location)}
               onClick={() => onSelectLocation(location)}
             >
