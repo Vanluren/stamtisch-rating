@@ -72,6 +72,7 @@ export default function LocationSearchInput({
             placeholder="Find your next stamtisch..."
             onChange={debouncedSearch}
             className="w-full relative"
+            height="lg"
             type="text"
           />
         </PopoverAnchor>

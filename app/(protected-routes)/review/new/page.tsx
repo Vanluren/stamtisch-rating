@@ -12,7 +12,7 @@ import { toast } from "sonner";
 type RatingInput = {
   overall: number;
   atmosphere: number;
-  cleanliness: number;
+  price: number;
 };
 
 export default function NewReviewPage() {
@@ -21,7 +21,7 @@ export default function NewReviewPage() {
   const [ratings, setRating] = useState<RatingInput>({
     overall: 0,
     atmosphere: 0,
-    cleanliness: 0,
+    price: 0,
   });
 
   const updateRatingState = (ratingKey: keyof RatingInput, rating: number) => {
@@ -76,6 +76,7 @@ export default function NewReviewPage() {
                   {key}
                 </Label>
                 <RatingInput
+                  size={40}
                   onRatingChange={(val) =>
                     updateRatingState(key as keyof RatingInput, val)
                   }
