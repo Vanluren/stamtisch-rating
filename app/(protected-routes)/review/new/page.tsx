@@ -13,7 +13,6 @@ type RatingInput = {
   overall: number;
   atmosphere: number;
   cleanliness: number;
-  safety: number;
 };
 
 export default function NewReviewPage() {
@@ -23,13 +22,13 @@ export default function NewReviewPage() {
     overall: 0,
     atmosphere: 0,
     cleanliness: 0,
-    safety: 0,
   });
 
   const updateRatingState = (ratingKey: keyof RatingInput, rating: number) => {
-    setRating({ ...ratings, [ratingKey]: rating });
-  };
+    console.log(ratingKey, rating, ratings);
 
+    return setRating({ ...ratings, [ratingKey]: rating });
+  };
   const handleSubmit = (formData: FormData) => {
     try {
       setLoading(true);
@@ -53,10 +52,12 @@ export default function NewReviewPage() {
           <h1
             className={`text-3xl font-bold ${selectedLocation ? "text-primary" : "text-gray-400"}`}
           >
-            {selectedLocation ? selectedLocation.name : "Select a location"}
+            {selectedLocation ? selectedLocation.name : "New Review"}
           </h1>
           <p className="text-muted-foreground">
-            {selectedLocation ? selectedLocation.address : null}
+            {selectedLocation
+              ? selectedLocation.address
+              : "Search for a location to review"}
           </p>
         </div>
         <form className="mt-8 space-y-6 relative" action={handleSubmit}>
@@ -70,14 +71,11 @@ export default function NewReviewPage() {
             </div>
 
             {Object.entries(ratings).map(([key, value]) => (
-              <div key={key}>
+              <div key={key} className="w-full">
                 <Label htmlFor="rating" className="capitalize">
                   {key}
                 </Label>
-                <input type="hidden" name={key} value={value} />
                 <RatingInput
-                  Icon={<BeerIcon size={24} />}
-                  fill={false}
                   onRatingChange={(val) =>
                     updateRatingState(key as keyof RatingInput, val)
                   }

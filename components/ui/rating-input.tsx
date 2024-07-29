@@ -6,16 +6,8 @@ import { cn } from "@/lib/utils";
 
 const ratingVariants = {
   default: {
-    star: "text-foreground",
+    star: "fill-primary stroke-primary",
     emptyStar: "text-muted-foreground",
-  },
-  destructive: {
-    star: "text-red-500",
-    emptyStar: "text-red-200",
-  },
-  yellow: {
-    star: "text-yellow-500",
-    emptyStar: "text-yellow-200",
   },
 };
 
@@ -81,7 +73,7 @@ export const RatingInput = ({
 
   return (
     <div
-      className={cn("flex w-fit items-center gap-2 ")}
+      className={cn("flex w-fit items-center gap-2 cursor-pointer")}
       onMouseLeave={handleMouseLeave}
       {...props}
     >
@@ -91,11 +83,15 @@ export const RatingInput = ({
             key: i,
             size,
             className: cn(
-              fill ? "fill-current stroke-1" : "fill-transparent",
+              fill
+                ? "fill-current stroke-current stroke-1"
+                : "fill-transparent",
               ratingVariants[variant].star,
+              "cursor-pointer",
             ),
             onClick: handleClick,
             onMouseEnter: handleMouseEnter,
+            onTouchEnd: handleClick,
             "data-star-index": i + 1,
           }),
         )}
@@ -109,6 +105,7 @@ export const RatingInput = ({
             className: cn("stroke-1", ratingVariants[variant].emptyStar),
             onClick: handleClick,
             onMouseEnter: handleMouseEnter,
+            onTouchEnd: handleClick,
             "data-star-index": i + fullStars + 1,
           }),
         )}
