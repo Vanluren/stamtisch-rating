@@ -41,7 +41,7 @@ export async function POST(request: NextRequest, _: NextResponse) {
 
     cookies().set("currentUser", user.id, {
       httpOnly: true,
-      secure: true,
+      secure: process.env.NODE_ENV === "production",
       sameSite: "strict",
     });
 
