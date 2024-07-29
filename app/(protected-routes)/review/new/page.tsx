@@ -5,6 +5,7 @@ import { Label } from "@/components/ui/label";
 import { RatingInput } from "@/components/ui/rating-input";
 import { Textarea } from "@/components/ui/textarea";
 import { ReviewLocation } from "@prisma/client";
+import { BeerIcon } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
 
@@ -75,6 +76,8 @@ export default function NewReviewPage() {
                 </Label>
                 <input type="hidden" name={key} value={value} />
                 <RatingInput
+                  Icon={<BeerIcon size={24} />}
+                  fill={false}
                   onRatingChange={(val) =>
                     updateRatingState(key as keyof RatingInput, val)
                   }

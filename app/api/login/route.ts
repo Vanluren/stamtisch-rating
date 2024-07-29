@@ -51,11 +51,14 @@ export async function POST(request: NextRequest, _: NextResponse) {
       },
       { status: 200 },
     );
-  } catch (error) {
+  } catch (err: unknown) {
+    if (err instanceof Error) {
+      console.error(new Error(err.message, { cause: err.stack }));
+    }
+
     return NextResponse.json(
       {
         error: "Internal server error",
-        stack: error,
       },
       { status: 500 },
     );
