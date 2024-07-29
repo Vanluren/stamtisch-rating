@@ -4,6 +4,8 @@ import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { RatingInput } from "@/components/ui/rating-input";
 import { Textarea } from "@/components/ui/textarea";
+import { fetcher } from "@/lib/fetch";
+import { API_ROUTES } from "@/lib/routes";
 import { ReviewLocation } from "@prisma/client";
 import { BeerIcon } from "lucide-react";
 import { useState } from "react";
@@ -29,16 +31,32 @@ export default function NewReviewPage() {
 
     return setRating({ ...ratings, [ratingKey]: rating });
   };
-  const handleSubmit = (formData: FormData) => {
+  const handleSubmit = async (formData: FormData) => {
     try {
       setLoading(true);
       const comment = formData.get("comment");
 
-      console.log(ratings);
+      if (!selectedLocation) {
+        toast.error("Please select a location to review");
+        return;
+      }
 
-      setLoading(false);
-      toast.success("Review submitted successfully");
-      return;
+      const { ok } = await fetcher<{ ok: boolean }>(API_ROUTES.review.create, {
+        method: "POST",
+        body: JSON.stringify({
+          locationId: selectedLocation?.id,
+          overall: ratings.overall,
+          atmosphere: ratings.atmosphere,
+          price: ratings.price,
+          comment,
+        }),
+      });
+
+      if (ok) {
+        setLoading(false);
+        toast.success("Review submitted successfully");
+        return;
+      }
     } catch (error) {
       toast.error("Failed to submit review");
       return;
@@ -90,7 +108,7 @@ export default function NewReviewPage() {
               <Textarea id="comment" name="comment" />
             </div>
 
-            <Button type="submit">
+            <Button type="submit" disabled={!selectedLocation}>
               {loading ? "Loading..." : "Submit review"}
             </Button>
           </div>
