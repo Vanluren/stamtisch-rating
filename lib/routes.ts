@@ -31,6 +31,9 @@ export const API_ROUTES = {
     search: "/locations/search",
     fetchById: "/locations/:id",
   },
+  "location-details": {
+    fetchByPlaceId: "/location-details/:id",
+  },
   review: {
     create: "/review/create",
     fetchById: "/review/:id",
