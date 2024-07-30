@@ -1,3 +1,4 @@
+import prisma from "@/lib/prisma";
 import { googlePlacesTextSearch } from "@/lib/google";
 import { NextRequest, NextResponse } from "next/server";
 

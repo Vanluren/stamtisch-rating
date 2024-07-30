@@ -5,32 +5,34 @@ import { Label } from "@/components/ui/label";
 import { RatingInput } from "@/components/ui/rating-input";
 import { Textarea } from "@/components/ui/textarea";
 import { fetcher } from "@/lib/fetch";
-import { API_ROUTES } from "@/lib/routes";
+import { API_ROUTES, ROUTES } from "@/lib/routes";
 import { ReviewLocation } from "@prisma/client";
-import { BeerIcon } from "lucide-react";
+import { capitalize } from "lodash-es";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "sonner";
 
 type RatingInput = {
-  overall: number;
   atmosphere: number;
   price: number;
+  music: number;
+  total: number;
 };
 
 export default function NewReviewPage() {
+  const { replace } = useRouter();
   const [loading, setLoading] = useState(false);
   const [selectedLocation, setSelectedLocation] = useState<ReviewLocation>();
   const [ratings, setRating] = useState<RatingInput>({
-    overall: 0,
     atmosphere: 0,
     price: 0,
+    music: 0,
+    total: 0,
   });
 
-  const updateRatingState = (ratingKey: keyof RatingInput, rating: number) => {
-    console.log(ratingKey, rating, ratings);
+  const updateRatingState = (ratingKey: keyof RatingInput, rating: number) =>
+    setRating({ ...ratings, [ratingKey]: rating });
 
-    return setRating({ ...ratings, [ratingKey]: rating });
-  };
   const handleSubmit = async (formData: FormData) => {
     try {
       setLoading(true);
@@ -45,9 +47,11 @@ export default function NewReviewPage() {
         method: "POST",
         body: JSON.stringify({
           locationId: selectedLocation?.id,
-          overall: ratings.overall,
-          atmosphere: ratings.atmosphere,
-          price: ratings.price,
+          ratings: Object.entries(ratings).map(([key, value]) => ({
+            key,
+            displayName: capitalize(key),
+            rating: value,
+          })),
           comment,
         }),
       });
@@ -55,7 +59,7 @@ export default function NewReviewPage() {
       if (ok) {
         setLoading(false);
         toast.success("Review submitted successfully");
-        return;
+        return replace(ROUTES.location(selectedLocation.id));
       }
     } catch (error) {
       toast.error("Failed to submit review");
