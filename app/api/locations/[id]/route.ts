@@ -23,6 +23,7 @@ export async function GET(
       },
       include: {
         reviews: true,
+        ratings: true,
       },
     });
 
@@ -34,8 +35,24 @@ export async function GET(
         { status: 404 },
       );
     }
+    const ratingsAggregated = await prisma.rating.aggregate({
+      where: {
+        location: {
+          id: locationId,
+        },
+      },
+      _avg: {
+        rating: true,
+      },
+    });
 
-    return NextResponse.json({ location }, { status: 200 });
+    console.log("rating", Math.round(ratingsAggregated._avg.rating ?? 0));
+
+    return NextResponse.json(
+      { location, rating: Math.round(ratingsAggregated._avg.rating ?? 0) },
+
+      { status: 200 },
+    );
   } catch (error: unknown) {
     if (error instanceof Error) {
       console.error(error.message, { stack: error.stack });

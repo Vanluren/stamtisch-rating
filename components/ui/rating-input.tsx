@@ -20,6 +20,7 @@ interface RatingsProps extends React.HTMLAttributes<HTMLDivElement> {
   variant?: keyof typeof ratingVariants;
   onRatingChange?: (rating: number) => void;
   name?: string;
+  interactive?: boolean;
 }
 
 export const RatingInput = ({
@@ -31,6 +32,7 @@ export const RatingInput = ({
   variant = "default",
   name = "rating",
   onRatingChange,
+  interactive = true,
   ...props
 }: RatingsProps) => {
   const [hoverRating, setHoverRating] = useState<number | null>(null);
@@ -38,6 +40,7 @@ export const RatingInput = ({
   const [isHovering, setIsHovering] = useState(false);
 
   const handleMouseEnter = (event: React.MouseEvent<HTMLDivElement>) => {
+    if (!interactive) return;
     setIsHovering(true);
     const starIndex = parseInt(
       (event.currentTarget as HTMLDivElement).dataset.starIndex || "0",
@@ -46,11 +49,14 @@ export const RatingInput = ({
   };
 
   const handleMouseLeave = () => {
+    if (!interactive) return;
     setIsHovering(false);
     setHoverRating(null);
   };
 
   const handleClick = (event: React.MouseEvent<HTMLDivElement>) => {
+    if (!interactive) return;
+
     const starIndex = parseInt(
       (event.currentTarget as HTMLDivElement).dataset.starIndex || "0",
     );
@@ -59,7 +65,10 @@ export const RatingInput = ({
     onRatingChange?.(starIndex);
   };
 
-  const displayRating = hoverRating ?? currentRating;
+  const displayRating = interactive
+    ? hoverRating ?? currentRating
+    : currentRating;
+
   const fullStars = Math.floor(displayRating);
 
   return (
@@ -78,7 +87,7 @@ export const RatingInput = ({
                 ? "fill-current stroke-current stroke-1"
                 : "fill-transparent",
               ratingVariants[variant].star,
-              "cursor-pointer",
+              interactive ? "cursor-pointer" : "cursor-default",
             ),
             onClick: handleClick,
             onMouseEnter: handleMouseEnter,
@@ -90,7 +99,11 @@ export const RatingInput = ({
           React.cloneElement(Icon, {
             key: i + fullStars + 1,
             size,
-            className: cn("stroke-1", ratingVariants[variant].emptyStar),
+            className: cn(
+              "stroke-1",
+              ratingVariants[variant].emptyStar,
+              interactive ? "cursor-pointer" : "cursor-default",
+            ),
             onClick: handleClick,
             onMouseEnter: handleMouseEnter,
             onTouchEnd: handleClick,
