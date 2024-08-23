@@ -40,11 +40,34 @@ export async function googlePlaceDetails(
     `https://maps.googleapis.com/maps/api/place/details/json`,
   );
   url.searchParams.append("place_id", placeId);
-  url.searchParams.append("fields", "photos,rating,website,reviews");
   url.searchParams.append("key", API_KEY);
 
-  const response = await fetch(url.toString());
+  const headers = new Headers();
+  headers.set("X-Goog-FieldMask", "photos,websiteUri,googleMapsUri,rating");
+
+  const response = await fetch(url.toString(), {
+    method: "GET",
+    headers,
+  });
   const json = await response.json();
 
+  console.log(json.result.photos);
+
   return json.result;
+}
+
+export function createGooglePhotoUrl(
+  placeId: string,
+  photoReference: string,
+  maxHeight = 400,
+  maxWidth = 600,
+) {
+  const url = new URL(
+    `https://places.googleapis.com/v1/places/${placeId}/photos/${photoReference}/media`,
+  );
+  url.searchParams.append("maxwidth", maxWidth.toString());
+  url.searchParams.append("maxheight", maxHeight.toString());
+  url.searchParams.append("key", API_KEY);
+
+  return url.toString();
 }

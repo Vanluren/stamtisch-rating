@@ -57,11 +57,11 @@ export default function RegisterPage() {
         <div className="grid grid-cols-2 gap-4">
           <div className="space-y-2">
             <Label htmlFor="first-name">First Name</Label>
-            <Input name="first-name" placeholder="Pede" required />
+            <Input name="first-name" placeholder="Ivan" required />
           </div>
           <div className="space-y-2">
             <Label htmlFor="last-name">Last Name</Label>
-            <Input name="last-name" placeholder="Pik" required />
+            <Input name="last-name" placeholder="Sarkharin" required />
           </div>
         </div>
         <div className="space-y-2">
@@ -69,7 +69,7 @@ export default function RegisterPage() {
           <Input
             name="email"
             type="email"
-            placeholder="pede@pik.com"
+            placeholder="ivan.sarkharin@unicorn.com"
             required
           />
         </div>

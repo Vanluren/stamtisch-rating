@@ -19,7 +19,7 @@ export default async function LocationPage({
   return (
     <div className="container mx-auto max-w-4xl px-4 py-8 sm:px-6 lg:px-8">
       <LocationDetails
-        id={location.id}
+        placeId={location.placeId}
         name={location.name}
         rating={rating}
         address={location.address}

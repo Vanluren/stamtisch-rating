@@ -1,11 +1,14 @@
 "use client";
 import { ReviewLocation } from "@prisma/client";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { RatingInput } from "../ui/rating-input";
 import LocationDetailImage from "./image";
 import LocationDetailsDescription from "./description";
 import { fetcher } from "@/lib/fetch";
 import { API_ROUTES } from "@/lib/routes";
+import { toast } from "sonner";
+import { PlaceDetails } from "@/app/api/location-details/[placeId]/route";
+import { createGooglePhotoUrl } from "@/lib/google";
 
 type LocationDetailsProps = {
   name: ReviewLocation["name"];
@@ -23,29 +26,41 @@ export default function LocationDetails({
   numberOfReviews,
 }: LocationDetailsProps) {
   const [isLoading, setIsLoading] = useState(true);
+  const [details, setDetails] = useState<PlaceDetails | null>(null);
 
   const fetchLocationDetails = useCallback(async () => {
     try {
-      const response = await fetcher(
+      const response = await fetcher<{ ok: boolean; details: PlaceDetails }>(
         API_ROUTES["location-details"].fetchByPlaceId.replace(":id", placeId),
         {
           method: "GET",
         },
       );
-      console.log(response);
-    } catch (error) {
-      console.error(error);
+      setDetails(response.details);
+      toast.error("Failed to fetch location details");
     } finally {
       setTimeout(() => setIsLoading(false), 250);
     }
   }, [placeId]);
+
+  const locationPhotoSrc = useMemo(
+    () =>
+      createGooglePhotoUrl(placeId, details?.mainPhoto.photo_reference ?? ""),
+    [details, placeId],
+  );
 
   useEffect(() => {
     fetchLocationDetails();
   }, [fetchLocationDetails]);
 
   return (
-    <div className="grid grid-cols-1 gap-8 sm:grid-cols-2">
+    <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 sm:grid-col-reverse">
+      <div className="sm:order-last">
+        <LocationDetailImage
+          isLoading={isLoading || !details?.mainPhoto.photo_reference}
+          src={locationPhotoSrc}
+        />
+      </div>
       <div>
         <h1 className="text-3xl font-bold">{name}</h1>
         <h2 className="text-lg text-muted-foreground mt-1">{address}</h2>
@@ -64,9 +79,6 @@ export default function LocationDetails({
             text={"æaljskdflaksdjfæljk"}
           />
         </div>
-      </div>
-      <div>
-        <LocationDetailImage isLoading={isLoading} src="alskdfkasd" />
       </div>
     </div>
   );

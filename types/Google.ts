@@ -1,3 +1,8 @@
+type PhotoReference = {
+  height: number;
+  width: number;
+  photo_reference: string;
+};
 type LocalizedText = {
   text: string;
   languageCode: string;
@@ -14,10 +19,8 @@ export type GooglePlace = {
 };
 
 export type GooglePlaceDetails = {
-  placeId: string;
-  photos: string[];
+  photos: PhotoReference[];
   rating: number;
-  googleMapsUri: string;
+  url: string;
   websiteUri: string;
-  reviews: {};
 };
